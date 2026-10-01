@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>يوميّات kareem 🤍✨</title>
+    <title>يوميّات ورفيق المسلم | kareem 🤍✨</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
@@ -25,6 +25,7 @@
 
     <main class="max-w-4xl w-full mx-auto p-4 flex-grow pb-24 space-y-6">
 
+        <!-- نسبة الإنجاز اليومي -->
         <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
             <div class="flex justify-between items-center mb-3">
                 <span class="font-bold text-slate-200">نسبة الإنجاز اليومي</span>
@@ -38,13 +39,16 @@
             </p>
         </div>
 
+        <!-- أزرار التنقل الرئيسية -->
         <div class="flex gap-2 overflow-x-auto pb-2">
             <button onclick="switchTab('goals')" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-teal-600 text-white shadow-lg" data-target="goals">الأولويات والمهام</button>
             <button onclick="switchTab('prayers')" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-800 text-slate-300 border border-slate-700" data-target="prayers">الصلوات اليومية</button>
-            <button onclick="switchTab('duaa')" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-800 text-slate-300 border border-slate-700" data-target="duaa">الأدعية والأذكار</button>
-            <button onclick="switchTab('tasbeeh')" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-800 text-slate-300 border border-slate-700" data-target="tasbeeh">السبحة الرقمية</button>
+            <button onclick="switchTab('quran')" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-800 text-slate-300 border border-slate-700" data-target="quran">📖 ورد القرآن</button>
+            <button onclick="switchTab('adhkar')" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-800 text-slate-300 border border-slate-700" data-target="adhkar">📿 الأذكار والسبحة</button>
+            <button onclick="switchTab('deeds')" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-800 text-slate-300 border border-slate-700" data-target="deeds">🌱 أعمال القلوب</button>
         </div>
 
+        <!-- 1. تبويب الأولويات والمهام -->
         <div id="tab-goals" class="tab-content active space-y-4">
             <div class="flex justify-between items-center">
                 <h2 class="text-lg font-bold text-teal-400">الأولويات والمهام اليومية</h2>
@@ -62,6 +66,7 @@
             <div id="goals-container" class="space-y-3"></div>
         </div>
 
+        <!-- 2. تبويب الصلوات اليومية -->
         <div id="tab-prayers" class="tab-content space-y-4">
             <div class="flex justify-between items-center">
                 <h2 class="text-lg font-bold text-teal-400">صلوات اليوم</h2>
@@ -70,43 +75,50 @@
             <div id="prayers-container" class="space-y-3"></div>
         </div>
 
-        <div id="tab-duaa" class="tab-content space-y-4">
-            <h2 class="text-lg font-bold text-teal-400 text-center mb-2">حصن المسلم والأدعية المختارة</h2>
-            <div class="space-y-3">
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-200 text-sm leading-relaxed">
-                    "اللهم إني أسئلك العفو والعافية في الدنيا والآخرة."
+        <!-- 3. تبويب ورد القرآن -->
+        <div id="tab-quran" class="tab-content space-y-4">
+            <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 space-y-4">
+                <h2 class="text-base font-bold text-teal-400">متابعة الورد اليومي من القرآن الكريم</h2>
+                <div class="flex items-center justify-between bg-slate-900 p-3 rounded-xl border border-slate-700">
+                    <span class="text-sm text-slate-300">الصفحة الحالية التي وصلت إليها:</span>
+                    <input type="number" id="quran-page" value="1" min="1" max="604" onchange="saveQuranProgress()"
+                        class="w-20 bg-slate-800 border border-slate-600 rounded-lg text-center py-1 text-teal-400 font-bold focus:outline-none">
                 </div>
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-200 text-sm leading-relaxed">
-                    "ربنا آتنا في الدنيا حسنة وفي الآخرة حسنة وقنا عذاب النار."
+                <div class="w-full bg-slate-900 h-3 rounded-full overflow-hidden border border-slate-700">
+                    <div id="quran-progress-bar" class="bg-teal-500 h-full w-0 transition-all duration-500"></div>
                 </div>
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-200 text-sm leading-relaxed">
-                    "يا مقلب القلوب ثبت قلبي على دينك."
-                </div>
+                <p id="quran-status" class="text-xs text-center text-slate-400"></p>
             </div>
         </div>
 
-        <div id="tab-tasbeeh" class="tab-content flex flex-col items-center justify-center space-y-6 pt-4">
-            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-lg w-full text-center">
-                <select id="tasbeeh-type" class="bg-slate-700 border border-slate-600 text-slate-200 rounded-xl px-4 py-2 mb-6 w-full focus:outline-none">
-                    <option value="سُبْحَانَ اللَّهِ">سُبْحَانَ اللَّهِ</option>
-                    <option value="الْحَمْدُ لِلَّهِ">الْحَمْدُ لِلَّهِ</option>
-                    <option value="لَا إِلَهَ إِلَّا اللَّهُ">لَا إِلَهَ إِلَّا اللَّهُ</option>
-                    <option value="اللَّهُ أَكْبَرُ">اللَّهُ أَكْبَرُ</option>
+        <!-- 4. تبويب الأذكار والسبحة الرقمية -->
+        <div id="tab-adhkar" class="tab-content space-y-4">
+            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-lg text-center space-y-6">
+                <h2 class="text-lg font-bold text-teal-400">السبحة والأذكار الرقمية</h2>
+                <select id="tasbeeh-type" onchange="resetAdhkarCounter()" class="bg-slate-700 border border-slate-600 text-slate-200 rounded-xl px-4 py-2 w-full focus:outline-none text-sm">
+                    <option value="33">سُبْحَانَ اللَّهِ (33 مرة)</option>
+                    <option value="33">الْحَمْدُ لِلَّهِ (33 مرة)</option>
+                    <option value="33">اللَّهُ أَكْبَرُ (33 مرة)</option>
+                    <option value="100">لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ (100 مرة)</option>
                     <option value="سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ</option>
                 </select>
 
-                <div id="tasbeeh-count" class="text-6xl font-black text-teal-400 my-8">0</div>
+                <div id="adhkar-count" class="text-6xl font-black text-teal-400 my-4">0</div>
 
-                <div class="flex justify-center gap-4">
-                    <button id="btn-count" class="w-40 h-40 bg-teal-600 hover:bg-teal-500 active:scale-95 text-white text-xl font-bold rounded-full shadow-2xl shadow-teal-900/50 transition-all flex items-center justify-center mx-auto">
-                        اضغط للتسبيح
-                    </button>
-                </div>
+                <button onclick="incrementAdhkar()" class="w-40 h-40 bg-teal-600 hover:bg-teal-500 active:scale-95 text-white font-bold rounded-full shadow-2xl shadow-teal-900/50 transition-all flex items-center justify-center mx-auto text-lg">
+                    تسبيح 👆
+                </button>
 
-                <button id="btn-reset-tasbeeh" class="mt-8 text-xs text-slate-400 hover:text-red-400 transition-colors">
+                <button onclick="resetAdhkarCounterManual()" class="text-xs text-slate-400 hover:text-red-400 transition-colors">
                     إعادة ضبط العد
                 </button>
             </div>
+        </div>
+
+        <!-- 5. تبويب أعمال القلوب والسنن -->
+        <div id="tab-deeds" class="tab-content space-y-3">
+            <h2 class="text-lg font-bold text-teal-400 mb-2">سنن وأعمال يومية مباركة</h2>
+            <div id="deeds-container" class="space-y-2"></div>
         </div>
 
     </main>
@@ -306,29 +318,86 @@
             }
         }
 
-        let tasbeehCount = parseInt(localStorage.getItem('app_tasbeeh')) || 0;
-        const countDisplay = document.getElementById('tasbeeh-count');
-        countDisplay.innerText = tasbeehCount;
+        // القرآن
+        const quranInput = document.getElementById('quran-page');
+        quranInput.value = localStorage.getItem('companion_quran') || 1;
+        updateQuranProgress();
 
-        document.getElementById('btn-count').addEventListener('click', () => {
-            tasbeehCount++;
-            countDisplay.innerText = tasbeehCount;
-            localStorage.setItem('app_tasbeeh', tasbeehCount);
+        function saveQuranProgress() {
+            const val = quranInput.value;
+            localStorage.setItem('companion_quran', val);
+            updateQuranProgress();
+        }
+
+        function updateQuranProgress() {
+            const page = parseInt(quranInput.value) || 1;
+            const percent = Math.round((page / 604) * 100);
+            document.getElementById('quran-progress-bar').style.width = percent + '%';
+            document.getElementById('quran-status').innerText = `أتممت ${percent}% من ختم القرآن الكريم (صفحة ${page} من 604)`;
+        }
+
+        // الأذكار والسبحة
+        let adhkarCount = parseInt(localStorage.getItem('companion_adhkar')) || 0;
+        const adhkarDisplay = document.getElementById('adhkar-count');
+        if (adhkarDisplay) adhkarDisplay.innerText = adhkarCount;
+
+        function incrementAdhkar() {
+            adhkarCount++;
+            if (adhkarDisplay) adhkarDisplay.innerText = adhkarCount;
+            localStorage.setItem('companion_adhkar', adhkarCount);
             playSound();
-        });
+        }
 
-        document.getElementById('btn-reset-tasbeeh').addEventListener('click', () => {
-            if(confirm("هل تريد تصفير عداد السبحة؟")) {
-                tasbeehCount = 0;
-                countDisplay.innerText = tasbeehCount;
-                localStorage.setItem('app_tasbeeh', tasbeehCount);
+        function resetAdhkarCounterManual() {
+            if(confirm("هل تريد تصفير عداد الأذكار؟")) {
+                adhkarCount = 0;
+                if (adhkarDisplay) adhkarDisplay.innerText = adhkarCount;
+                localStorage.setItem('companion_adhkar', adhkarCount);
             }
-        });
+        }
+
+        function resetAdhkarCounter() {
+            adhkarCount = 0;
+            if (adhkarDisplay) adhkarDisplay.innerText = 0;
+            localStorage.setItem('companion_adhkar', 0);
+        }
+
+        // أعمال القلوب
+        let deeds = JSON.parse(localStorage.getItem('companion_deeds')) || [
+            { text: "☀️ أذكار الصباح والمساء", done: false },
+            { text: "💧 صلاة الضحى (ركعتين على الأقل)", done: false },
+            { text: "🤝 إدخال السرور على مسلم أو إعانة محتاج", done: false },
+            { text: "📖 قراءة صفحتين من القرآن بتمعن", done: false },
+            { text: "🌙 الاستغفار وقت السحر أو قبل النوم", done: false }
+        ];
+
+        function renderDeeds() {
+            const container = document.getElementById('deeds-container');
+            if(!container) return;
+            container.innerHTML = '';
+            deeds.forEach((deed, idx) => {
+                const div = document.createElement('div');
+                div.className = `p-3 rounded-xl border flex items-center gap-3 transition-all ${deed.done ? 'bg-slate-800/50 border-teal-500/30' : 'bg-slate-800 border-slate-700'}`;
+                div.innerHTML = `
+                    <input type="checkbox" ${deed.done ? 'checked' : ''} onchange="toggleDeed(${idx})" class="w-5 h-5 accent-teal-500 rounded cursor-pointer">
+                    <span class="${deed.done ? 'line-through text-slate-400' : 'text-slate-100'} text-sm font-medium">${deed.text}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function toggleDeed(idx) {
+            deeds[idx].done = !deeds[idx].done;
+            if (deeds[idx].done) playSound();
+            localStorage.setItem('companion_deeds', JSON.stringify(deeds));
+            renderDeeds();
+        }
 
         renderGoals();
         renderPrayers();
         updateProgress();
         fetchPrayerTimes();
+        renderDeeds();
     </script>
 </body>
 </html>
