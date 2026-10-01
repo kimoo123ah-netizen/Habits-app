@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متتبع الأهداف الذكي</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-p-4 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700 m-4">
+        <header class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-emerald-400">متتبع الأهداف اليومي</h1>
+            <p class="text-sm text-slate-400 mt-1">نظم يومك، وتابع طاعاتك وعاداتك</p>
+        </header>
+
+        <!-- شريط التقدم -->
+        <div class="mb-6 bg-slate-700 rounded-full h-4 overflow-hidden p-0.5">
+            <div id="progress-bar" class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
+        </div>
+        <div id="progress-text" class="text-center text-xs text-slate-300 mb-4">تم إنجاز 0% من يومك</div>
+
+        <!-- رسالة التحفيز -->
+        <div id="motivation-box" class="bg-slate-700/50 border border-slate-600 p-3 rounded-xl text-center text-sm text-emerald-300 mb-6">
+            بسم الله نبدأ يوم جديد، استعن بالله ولا تعجز.
+        </div>
+
+        <!-- قائمة الأهداف -->
+        <div id="goals-container" class="space-y-3 mb-6">
+            <!-- سيتم تعبئة الأهداف هنا ديناميكياً -->
+        </div>
+
+        <!-- إضافة هدف جديد -->
+        <div class="flex gap-2 pt-4 border-t border-slate-700">
+            <input type="text" id="new-goal-input" placeholder="أضف هدفاً جديداً..." class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-emerald-500">
+            <button onclick="addNewGoal()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl text-sm font-semibold transition">إضافة</button>
+        </div>
+    </div>
+
+    <script>
+        let goals = JSON.parse(localStorage.getItem('smart_goals')) || [
+            { id: 1, text: "صلاة الفجر", completed: false },
+            { id: 2, text: "صلاة الظهر", completed: false },
+            { id: 3, text: "صلاة العصر", completed: false },
+            { id: 4, text: "صلاة المغرب", completed: false },
+            { id: 5, text: "صلاة العشاء", completed: false },
+            { id: 6, text: "مذاكرة ساعة", completed: false },
+            { id: 7, text: "تثقف (قراءة أو استماع)", completed: false },
+            { id: 8, text: "رياضة", completed: false },
+            { id: 9, text: "قراءة قرآن", completed: false },
+            { id: 10, text: "الصحيان الساعة 9 صباحاً", completed: false }
+        ];
+
+        function renderGoals() {
+            const container = document.getElementById('goals-container');
+            container.innerHTML = '';
+            
+            let completedCount = 0;
+
+            goals.forEach((goal, index) => {
+                if (goal.completed) completedCount++;
+
+                const div = document.createElement('div');
+                div.className = `flex items-center justify-between p-3 rounded-xl border transition ${goal.completed ? 'bg-emerald-950/30 border-emerald-800/50' : 'bg-slate-900/50 border-slate-700'}`;
+                
+                div.innerHTML = `
+                    <label class="flex items-center gap-3 cursor-pointer flex-1 select-none">
+                        <input type="checkbox" ${goal.completed ? 'checked' : ''} onclick="toggleGoal(${goal.id})" class="w-5 h-5 accent-emerald-500 rounded">
+                        <span class="${goal.completed ? 'line-through text-slate-500' : 'text-slate-200'} text-sm font-medium">${goal.text}</span>
+                    </label>
+                    <button onclick="deleteGoal(${goal.id})" class="text-slate-500 hover:text-red-400 text-xs px-2 py-1">حذف</button>
+                `;
+                container.appendChild(div);
+            });
+
+            updateProgress(completedCount);
+        }
+
+        function toggleGoal(id) {
+            goals = goals.map(g => g.id === id ? { ...g, completed: !g.completed } : g);
+            saveAndRender();
+        }
+
+        function addNewGoal() {
+            const input = document.getElementById('new-goal-input');
+            const text = input.value.trim();
+            if(!text) return;
+
+            goals.push({ id: Date.now(), text: text, completed: false });
+            input.value = '';
+            saveAndRender();
+        }
+
+        function deleteGoal(id) {
+            goals = goals.filter(g => g.id !== id);
+            saveAndRender();
+        }
+
+        function updateProgress(completedCount) {
+            const total = goals.length;
+            const percentage = total === 0 ? 0 : Math.round((completedCount / total) * 100);
+            
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').innerText = `تم إنجاز ${percentage}% من يومك (${completedCount}/${total})`;
+
+            const box = document.getElementById('motivation-box');
+            if (percentage === 100) {
+                box.innerText = "🌟 ممتاز جداً! أتممت كل أهدافك اليوم، بورك في وقتك وجهدك.";
+            } else if (percentage >= 50) {
+                box.innerText = "💪 ممتاز، أنت منتصف الطريق تقريباً، استمر ولا تتوقف!";
+            } else if (percentage > 0) {
+                box.innerText = "🚀 بداية رائعة، كل خطوة تقربك من نسختك الأفضل.";
+            } else {
+                box.innerText = "🌱 اليوم يبتسم لمن يبدأه، توكل على الله وابدأ بإنجاز أول هدف.";
+            }
+        }
+
+        function saveAndRender() {
+            localStorage.setItem('smart_goals', JSON.stringify(goals));
+            renderGoals();
+        }
+
+        renderGoals();
+    </script>
+</body>
+</html>
