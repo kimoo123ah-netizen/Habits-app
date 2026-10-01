@@ -1,1 +1,302 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>يوميَّات kareem 🤍✨</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
 
+    <!-- Header -->
+    <header class="bg-slate-800 border-b border-slate-700 p-4 sticky top-0 z-50 shadow-md">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold bg-gradient-to-r from-teal-400 to-indigo-400 bg-clip-text text-transparent">
+                يوميَّات kareem 🤍✨
+            </h1>
+            <div id="date-display" class="text-sm text-slate-400 font-medium"></div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl w-full mx-auto p-4 flex-grow pb-24">
+
+        <!-- 1. تبويب المهام اليومية -->
+        <div id="tab-goals" class="tab-content active space-y-6">
+            <!-- Progress Section -->
+            <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="font-bold text-slate-200">نسبة الإنجاز اليومي</span>
+                    <span id="progress-text" class="text-teal-400 font-bold">0%</span>
+                </div>
+                <div class="w-full bg-slate-700 h-3 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="bg-gradient-to-r from-teal-500 to-indigo-500 h-full w-0 transition-all duration-500"></div>
+                </div>
+                <p id="motivational-msg" class="text-sm text-slate-400 mt-3 text-center italic"></p>
+            </div>
+
+            <!-- Add Goal Form -->
+            <form id="goal-form" class="flex gap-2">
+                <input type="text" id="goal-input" placeholder="أضف هدفاً جديداً ليومك..." 
+                    class="flex-grow bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-teal-500 text-slate-100">
+                <button type="submit" class="bg-teal-600 hover:bg-teal-500 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-teal-900/20">
+                    إضافة
+                </button>
+            </form>
+
+            <!-- Goals List -->
+            <div id="goals-container" class="space-y-3">
+                <!-- Goals injected via JS -->
+            </div>
+        </div>
+
+        <!-- 2. تبويب مواقيت الصلاة -->
+        <div id="tab-prayer" class="tab-content space-y-6">
+            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-lg text-center">
+                <h2 class="text-lg font-bold text-teal-400 mb-2">مواقيت الصلاة (القاهرة)</h2>
+                <p class="text-xs text-slate-400 mb-6">تتحدث حسابياً بدقة لليوم الحالي</p>
+                <div id="prayer-times-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-right">
+                    <!-- Prayer times injected via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. تبويب الأدعية والأذكار -->
+        <div id="tab-duaa" class="tab-content space-y-4">
+            <h2 class="text-lg font-bold text-teal-400 text-center mb-2">أدعية مختارة حصن المسلم</h2>
+            <div class="space-y-3" id="duaa-container">
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-200 text-sm leading-relaxed">
+                    "اللهم إني أسئلك العفو والعافية في الدنيا والآخرة."
+                </div>
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-200 text-sm leading-relaxed">
+                    "ربنا آتنا في الدنيا حسنة وفي الآخرة حسنة وقنا عذاب النار."
+                </div>
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-200 text-sm leading-relaxed">
+                    "يا مقلب القلوب ثبت قلبي على دينك."
+                </div>
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-200 text-sm leading-relaxed">
+                    "اللهم إني أعوذ بك من الهم والحزن، والعجز والكسل، والبخل والجبن، وغلبة الدين وقرجال الرجال."
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. تبويب السبحة الرقمية -->
+        <div id="tab-tasbeeh" class="tab-content flex flex-col items-center justify-center space-y-6 pt-4">
+            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-lg w-full text-center">
+                <select id="tasbeeh-type" class="bg-slate-700 border border-slate-600 text-slate-200 rounded-xl px-4 py-2 mb-6 w-full focus:outline-none">
+                    <option value="سُبْحَانَ اللَّهِ">سُبْحَانَ اللَّهِ</option>
+                    <option value="الْحَمْدُ لِلَّهِ">الْحَمْدُ لِلَّهِ</option>
+                    <option value="لَا إِلَهَ إِلَّا اللَّهُ">لَا إِلَهَ إِلَّا اللَّهُ</option>
+                    <option value="اللَّهُ أَكْبَرُ">اللَّهُ أَكْبَرُ</option>
+                    <option value="سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ</option>
+                </select>
+
+                <div id="tasbeeh-count" class="text-6xl font-black text-teal-400 my-8">0</div>
+
+                <div class="flex justify-center gap-4">
+                    <button id="btn-count" class="w-40 h-40 bg-teal-600 hover:bg-teal-500 active:scale-95 text-white text-xl font-bold rounded-full shadow-2xl shadow-teal-900/50 transition-all flex items-center justify-center mx-auto">
+                        اضغط للتسبيح
+                    </button>
+                </div>
+
+                <button id="btn-reset-tasbeeh" class="mt-8 text-xs text-slate-400 hover:text-red-400 transition-colors">
+                    إعادة ضبط العد
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-slate-800 border-t border-slate-700 p-2 shadow-lg z-50">
+        <div class="max-w-4xl mx-auto flex justify-around">
+            <button onclick="switchTab('goals')" class="nav-btn flex flex-col items-center text-teal-400 p-2" data-target="goals">
+                <span class="text-xs mt-1 font-bold">المهام</span>
+            </button>
+            <button onclick="switchTab('prayer')" class="nav-btn flex flex-col items-center text-slate-400 p-2" data-target="prayer">
+                <span class="text-xs mt-1 font-bold">الصلاة</span>
+            </button>
+            <button onclick="switchTab('duaa')" class="nav-btn flex flex-col items-center text-slate-400 p-2" data-target="duaa">
+                <span class="text-xs mt-1 font-bold">الأدعية</span>
+            </button>
+            <button onclick="switchTab('tasbeeh')" class="nav-btn flex flex-col items-center text-slate-400 p-2" data-target="tasbeeh">
+                <span class="text-xs mt-1 font-bold">السبحة</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Audio element for celebration sound -->
+    <audio id="success-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+
+    <script>
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.dataset.target === tabId) {
+                    btn.classList.remove('text-slate-400');
+                    btn.classList.add('text-teal-400');
+                } else {
+                    btn.classList.remove('text-teal-400');
+                    btn.classList.add('text-slate-400');
+                }
+            });
+        }
+
+        // Date & Daily Auto Reset Logic
+        const todayStr = new Date().toDateString();
+        const lastDate = localStorage.getItem('kareem_last_date');
+
+        let goals = JSON.parse(localStorage.getItem('kareem_goals')) || [
+            { text: "قراءة ورد القرآن الكريم", completed: false },
+            { text: "أداء الصلوات في أوقاتها", completed: false },
+            { text: "مراجعة المهام اليومية", completed: false }
+        ];
+
+        if (lastDate !== todayStr) {
+            // New Day: Reset completion status automatically
+            goals.forEach(g => g.completed = false);
+            localStorage.setItem('kareem_last_date', todayStr);
+            localStorage.setItem('kareem_goals', JSON.stringify(goals));
+        }
+
+        // Render Date Header
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('date-display').innerText = new Date().toLocaleDateString('ar-EG', options);
+
+        // Goals Management
+        const form = document.getElementById('goal-form');
+        const input = document.getElementById('goal-input');
+        const container = document.getElementById('goals-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const motivationalMsg = document.getElementById('motivational-msg');
+        const successSound = document.getElementById('success-sound');
+
+        function saveAndRender() {
+            localStorage.setItem('kareem_goals', JSON.stringify(goals));
+            renderGoals();
+        }
+
+        function renderGoals() {
+            container.innerHTML = '';
+            let completedCount = 0;
+
+            goals.forEach((goal, index) => {
+                if (goal.completed) completedCount++;
+
+                const div = document.createElement('div');
+                div.className = `flex items-center justify-between p-4 rounded-xl border transition-all ${goal.completed ? 'bg-slate-800/50 border-teal-500/30 opacity-75' : 'bg-slate-800 border-slate-700'}`;
+                
+                div.innerHTML = `
+                    <label class="flex items-center gap-3 cursor-pointer flex-grow">
+                        <input type="checkbox" ${goal.completed ? 'checked' : ''} onchange="toggleGoal(${index})" 
+                            class="w-5 h-5 accent-teal-500 rounded cursor-pointer">
+                        <span class="${goal.completed ? 'line-through text-slate-400' : 'text-slate-100'} font-medium">${goal.text}</span>
+                    </label>
+                    <button onclick="deleteGoal(${index})" class="text-slate-500 hover:text-red-400 px-2 py-1 transition-colors">✕</button>
+                `;
+                container.appendChild(div);
+            });
+
+            const total = goals.length;
+            const percentage = total === 0 ? 0 : Math.round((completedCount / total) * 100);
+
+            progressBar.style.width = percentage + '%';
+            progressText.innerText = percentage + '%';
+
+            // Motivational & Spiritual Messages based on progress
+            if (percentage === 100 && total > 0) {
+                motivationalMsg.innerText = "🌟 ما شاء الله! أتممت مهامك اليومية بكل إتقان، بباركلك يا كريم وربنا يكتبلك البركة!";
+            } else if (percentage >= 50) {
+                motivationalMsg.innerText = "💪 ممتاز يا كريم! أنت في منتصف الطريق، استمر وعينك على القمة.";
+            } else if (percentage > 0) {
+                motivationalMsg.innerText = "🌱 بداية موفقة، خطوة بخطوة نحو إنجاز عظيم اليوم.";
+            } else {
+                motivationalMsg.innerText = "✨ توكل على الله وابدأ إنجاز أول مهامك اليوم يا كريم.";
+            }
+        }
+
+        function toggleGoal(index) {
+            const wasCompleted = goals[index].completed;
+            goals[index].completed = !goals[index].completed;
+
+            if (!wasCompleted && goals[index].completed) {
+                successSound.currentTime = 0;
+                successSound.play().catch(e => console.log('Audio autoplay blocked'));
+            }
+            saveAndRender();
+        }
+
+        function deleteGoal(index) {
+            goals.splice(index, 1);
+            saveAndRender();
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = input.value.trim();
+            if (text) {
+                goals.push({ text, completed: false });
+                input.value = '';
+                saveAndRender();
+            }
+        });
+
+        // Prayer Times Dummy/Calculated Simulation for Cairo
+        function loadPrayerTimes() {
+            const prayers = [
+                { name: "الفجر", time: "04:22 ص" },
+                { name: "الشروق", time: "05:50 ص" },
+                { name: "الظهر", time: "11:47 ص" },
+                { name: "العصر", time: "03:10 م" },
+                { name: "المغرب", time: "05:44 م" },
+                { name: "العشاء", time: "07:02 م" }
+            ];
+
+            const listContainer = document.getElementById('prayer-times-list');
+            listContainer.innerHTML = '';
+            prayers.forEach(p => {
+                const item = document.createElement('div');
+                item.className = "flex justify-between items-center p-3 bg-slate-700/50 rounded-xl border border-slate-600/50";
+                item.innerHTML = `<span class="font-bold text-slate-200">${p.name}</span><span class="text-teal-400 font-mono font-bold">${p.time}</span>`;
+                listContainer.appendChild(item);
+            });
+        }
+
+        // Tasbeeh Counter Logic
+        let tasbeehCount = parseInt(localStorage.getItem('kareem_tasbeeh')) || 0;
+        const countDisplay = document.getElementById('tasbeeh-count');
+        const btnCount = document.getElementById('btn-count');
+        const btnResetTasbeeh = document.getElementById('btn-reset-tasbeeh');
+
+        countDisplay.innerText = tasbeehCount;
+
+        btnCount.addEventListener('click', () => {
+            tasbeehCount++;
+            countDisplay.innerText = tasbeehCount;
+            localStorage.setItem('kareem_tasbeeh', tasbeehCount);
+        });
+
+        btnResetTasbeeh.addEventListener('click', () => {
+            if(confirm("هل تريد تصفير عداد السبحة؟")) {
+                tasbeehCount = 0;
+                countDisplay.innerText = tasbeehCount;
+                localStorage.setItem('kareem_tasbeeh', tasbeehCount);
+            }
+        });
+
+        // Initial Render
+        renderGoals();
+        loadPrayerTimes();
+    </script>
+</body>
+</html>
